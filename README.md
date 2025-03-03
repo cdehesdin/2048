@@ -32,4 +32,4 @@ sont occupées et que plus aucun mouvement ne permet de combiner de
 tuiles.
 
 ## Bibliothèques requises
-La bibliothèque ncurses, n'étant pas native à C++, a été utilisée.
+La bibliothèque `ncurses`, n'étant pas native à C++, a été utilisée.
