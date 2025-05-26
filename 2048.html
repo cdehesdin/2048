@@ -287,7 +287,6 @@ class Game_2048 {
     }
 }
 
-<<<<<<< HEAD
 const gameActive = (axes) => {
     if (game.isValid(axes)) {
         game.movement(axes)
@@ -320,8 +319,6 @@ const gameActive = (axes) => {
     }
 }
 
-=======
->>>>>>> 69bd08601b66d0e22af2d40761fe36f2a2367303
 let game = undefined
 
 console.log(document.querySelectorAll(`.retry`))
@@ -332,7 +329,6 @@ document.querySelectorAll(`.retry`).forEach((element) => element.addEventListene
     displayGame(game)
 }))
 
-<<<<<<< HEAD
 // Pour le mouvement avec les flèches
 document.addEventListener("keydown", (e) => {
     if (typeof game !== 'undefined' && !game.isFinish()) {
@@ -392,57 +388,5 @@ document.addEventListener("touchend", function (e) {
     startY = 0
 });
 
-
-=======
-document.addEventListener("keydown", (e) => {
-    if (typeof game !== 'undefined' && !game.isFinish()) {
-        let axes = undefined
-        switch (e.key) {
-            case "ArrowUp":
-                axes = 'u'
-                break
-            case "ArrowDown":
-                axes = 'd'
-                break
-            case "ArrowRight":
-                axes = 'r'
-                break
-            case "ArrowLeft":
-                axes = 'l'
-                break
-        }
-
-        if (game.isValid(axes)) {
-            game.movement(axes)
-                
-            let x = randomInt(4), y = randomInt(4)
-            while (game.grid[x][y] !== 0) {
-                x = randomInt(4)
-                y = randomInt(4)
-            }
-            game.grid[x][y] = game.twoOrFour()
-        }
-
-        document.querySelector(`#score`).innerHTML = game.score
-        for (let x=0; x<game.grid.length; x++) {
-            for (let y=0; y<game.grid.length; y++) {
-                const cell = document.querySelector(`#cell-${game.grid.length*x+y+1}`)
-                cell.innerHTML = null
-                cell.classList = []
-                if (game.grid[x][y] !== 0) {
-                    cell.innerHTML = game.grid[x][y]
-                    cell.classList.add(`nb-${game.grid[x][y]}`)
-                }
-            }
-        }
-
-        if (game.isFinish()) {
-            document.querySelector(`.game-message`).classList.remove("hidden")
-            document.querySelector(`.game-message a.retry`).innerHTML = "Recommencez une partie"
-            document.querySelector(`.game-message span`).classList = []
-        }
-    }
-})
->>>>>>> 69bd08601b66d0e22af2d40761fe36f2a2367303
 </script>
 </html>
