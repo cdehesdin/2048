@@ -358,7 +358,7 @@ document.querySelectorAll(`.game`).addEventListener("touchstart", function (e) {
     startY = e.touches[0].clientY;
 });
 
-document.addEventListener("touchend", function (e) {
+document.querySelectorAll(`.game`).addEventListener("touchend", function (e) {
     if (typeof game !== 'undefined' && !game.isFinish()) {
         const endX = e.changedTouches[0].clientX;
         const endY = e.changedTouches[0].clientY;
