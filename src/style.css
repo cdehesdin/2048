@@ -189,7 +189,8 @@ main.content_home {
 
     .game_2048 {
         max-width: 500px;
-        width: 100%;
+        width: calc(100% - 20px);
+        margin: 0 10px;
 
         .title {
             display: flex;
