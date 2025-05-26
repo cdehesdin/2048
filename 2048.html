@@ -353,7 +353,7 @@ document.addEventListener("keydown", (e) => {
 let startX = 0;
 let startY = 0;
 
-document.addEventListener("touchstart", function (e) {
+document.querySelectorAll(`.game`).addEventListener("touchstart", function (e) {
     startX = e.touches[0].clientX;
     startY = e.touches[0].clientY;
 });
