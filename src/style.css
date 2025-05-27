@@ -68,6 +68,7 @@ header {
     nav {
         height: 100%;
         overflow-y: scroll;
+        overscroll-behavior: contain;
 
         ul {
             display: flex;
