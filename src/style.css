@@ -21,6 +21,7 @@ body {
     font-feature-settings: "liga", "tnum", "case", "calt", "zero", "ss01", "locl";
     -webkit-font-smoothing: antialiased;
     overflow-y: hidden;
+    overscroll-behavior: contain;
 }
 
 :root {
@@ -68,7 +69,6 @@ header {
     nav {
         height: 100%;
         overflow-y: scroll;
-        overscroll-behavior: contain;
 
         ul {
             display: flex;
