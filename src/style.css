@@ -24,14 +24,6 @@ body {
     overscroll-behavior-y: none;
 }
 
-:root {
-    --color-1: #186cb8;
-    --color-2: #2a9a9f;
-    --color-3: #f1b211;
-    --color-4: #e83611;
-    --color-5: #f9002f;
-}
-
 
 /**************************************************/
 /*                      STYLE                     */
@@ -97,13 +89,17 @@ header {
                 &.active {
                     font-weight: 500;
                     padding: 18px 0;
-                    border-right: 3px solid #000;
+                    color: #414B53;
+                    border-right: 3px solid #414B53;
                 }
             }
         }
     }
 }
 
+/**************************************************/
+/*                    HOME PAGE                   */
+/**************************************************/
 main.content_home {
     display: flex;
     flex-direction: row;
@@ -174,11 +170,17 @@ main.content_home {
             font-weight: 200;
         }
     }
+
+    footer {
+        align-self: start;
+        font-size: 0.7em;
+        color: #414B53;
+    }
 }
 
 
 /**************************************************/
-/*                      2048                      */
+/*                      GAME                      */
 /**************************************************/
 .game {
     display: flex;
@@ -188,7 +190,7 @@ main.content_home {
     padding: 40px 20px;
     overflow-y: scroll;
 
-    .game_2048 {
+    > div {
         max-width: 500px;
         width: calc(100% - 20px);
         margin: 0 10px;
@@ -197,117 +199,220 @@ main.content_home {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            color: rgb(135, 126, 117);
 
             > div {
                 display: flex;
                 align-items: center;
 
-                .retry {
-                    color: rgb(135, 126, 117);
+                a {
                     font-size: 1.2em;
                     margin-right: 15px;
+                }
+
+                > div {
+                    background-color: rgb(187, 173, 160);
+                    padding: 3px 5px 2px;
+                    text-align: center;
+                    color: #fff;
+                    font-weight: 800;
+                    font-size: 1.2em;
+                    border-radius: 5px;
+                    min-width: 65.625px;
+
+                    &::before {
+                        display: block;
+                        text-align: center;
+                        text-transform: uppercase;
+                        font-weight: 600;
+                        height: 13px;
+                        font-size: 13px;
+                        color: rgb(238, 228, 218);
+                    }
                 }
             }
 
             h1 {
-                color: rgb(119, 110, 101);
                 font-size: 3em;
                 font-weight: 700;
                 margin: 0;
-            }
-
-            #score {
-                background-color: rgb(187, 173, 160);
-                padding: 3px 5px 2px;
-                text-align: center;
-                color: #fff;
-                font-weight: 800;
-                font-size: 1.2em;
-                border-radius: 5px;
-                min-width: 65.625px;
-
-                &::before {
-                    display: block;
-                    content: "Score";
-                    text-align: center;
-                    text-transform: uppercase;
-                    font-weight: 600;
-                    height: 13px;
-                    font-size: 13px;
-                    color: rgb(238, 228, 218);
-                }
+                color: rgb(119, 110, 101);
             }
         }
+    }
 
-        .table {
-            position: relative;
-            background-color: rgb(187, 173, 160);
-            border-radius: 7px;
-            padding: 15px;
+    .table {
+        position: relative;
+        border-radius: 7px;
+        background-color: rgb(187, 173, 160);
 
-            .game-message {
-                display: flex;
-                flex-direction: column;
-                position: absolute;
-                margin: -15px;
-                width: 100%;
-                height: 100%;
-                background-color: rgba(238, 228, 218, 0.5);
+        .game-message {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            width: 100%;
+            height: 100%;
 
-                span {margin-bottom: 10px;}
+            span {margin-bottom: 10px;}
 
-                .retry {
-                    background: #8f7a66;
-                    border-radius: 7px;
-                    padding: 3px 10px;
-                    font-size: 0.6em;
-                    font-weight: 600;
-                    color: #f9f6f2;
-                    cursor: pointer;
-                }
+            a {
+                margin-top: 20px;
+                border-radius: 7px;
+                padding: 3px 10px;
+                font-size: 0.6em;
+                font-weight: 600;
+                cursor: pointer;
+                background: #8f7a66;
+                color: #f9f6f2;
+
+                &:first-child {margin-top: 0;}
             }
+        }
             
+        > div {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 1.9em;
+            font-weight: 900;
+            color: rgb(119, 110, 101);
+
+            &:last-child {margin-bottom: 0;}
+
             > div {
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                margin-bottom: 15px;
-                font-size: 1.9em;
-                color: rgb(119, 110, 101);
-                font-weight: 900;
+                aspect-ratio : 1 / 1;
+                margin-right: 15px;
 
-                &:last-child {margin-bottom: 0;}
+                &:last-child {margin-right: 0;}
+            }
+        }
+    }
+}
 
-                > div {
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    width: calc(100% / 4);
-                    aspect-ratio : 1 / 1;
-                    background-color: rgba(238, 228, 218, 0.35);
-                    color: #fff;
-                    margin-right: 15px;
-                    border-radius: 5px;
 
-                    &:last-child {margin-right: 0;}
+/**************************************************/
+/*                      2048                      */
+/**************************************************/
+.game_2048 {
+    .title #score::before {content: "Score";}
 
-                    &.nb-2 {
-                        background-color: rgb(237, 226, 221);
-                        color: #776e65;
-                    }
-                    &.nb-4 {
-                        background-color: rgb(235, 225, 203);
-                        color: #776e65;
-                    }
-                    &.nb-8 {background-color: rgb(233, 178, 131);}
-                    &.nb-16 {background-color: rgb(233, 151, 109);}
-                    &.nb-32 {background-color: rgb(230, 129, 105);}
-                    &.nb-64 {background-color: rgb(222, 99, 73);}
-                    &.nb-128 {background-color: rgb(232, 204, 128);}
-                    &.nb-256 {background-color: rgb(230, 220, 113);}
-                    &.nb-512 {background-color: rgb(232, 198, 104);}
-                    &.nb-1024 {background-color: rgb(232, 198, 104);}
-                    &.nb-2048 {background-color: rgb(232, 198, 104);}
+    .table {
+        padding: 15px;
+
+        .game-message {
+            margin: -15px;
+            background-color: rgba(238, 228, 218, 0.75);
+        }
+            
+        > div > div {
+            width: calc(100% / 4);
+            border-radius: 5px;
+            background-color: rgba(238, 228, 218, 0.35);
+            color: #fff;
+
+            &.nb-2 {
+                background-color: rgb(237, 226, 221);
+                color: #776e65;
+            }
+            &.nb-4 {
+                background-color: rgb(235, 225, 203);
+                color: #776e65;
+            }
+            &.nb-8 {background-color: rgb(233, 178, 131);}
+            &.nb-16 {background-color: rgb(233, 151, 109);}
+            &.nb-32 {background-color: rgb(230, 129, 105);}
+            &.nb-64 {background-color: rgb(222, 99, 73);}
+            &.nb-128 {background-color: rgb(232, 204, 128);}
+            &.nb-256 {background-color: rgb(230, 220, 113);}
+            &.nb-512 {background-color: rgb(232, 198, 104);}
+            &.nb-1024 {background-color: rgb(232, 198, 104);}
+            &.nb-2048 {background-color: rgb(232, 198, 104);}
+        }
+    }
+}
+
+
+/**************************************************/
+/*                     MORPION                    */
+/**************************************************/
+.game_morpion {
+    .title #nbGame::before {content: "Parties";}
+
+    #score {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.2em;
+        margin-bottom: 15px;
+        background-color: rgb(187, 173, 160);
+        padding: 3px 5px;
+        border-radius: 5px;
+
+        > div {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            width: 150px;
+            margin-right: 15px;
+            max-width: calc(50% - 15px - 2 * 10px);
+            padding: 2px 10px;
+            border-radius: 5px;
+            font-weight: 900;
+            color: rgb(238, 228, 218);
+            
+            &.play-1 {background-color: rgb(230, 129, 105, 0.4);}
+            &.play-2 {background-color: rgb(232, 198, 104, 0.45);}
+
+            &::before {
+                display: block;
+                content: "Joueur 1";
+                text-align: center;
+                text-transform: uppercase;
+                font-weight: 600;
+                font-size: 13px;
+                color: rgb(238, 228, 218);
+            }
+
+            &:last-child {
+                margin-left: 15px;
+                flex-direction: row-reverse;
+
+                &::before {content: "Joueur 2"}
+            }
+        }
+    }
+
+    .table {
+        padding: 0;
+
+        .game-message {
+            margin: 0;
+            background-color: #faf9f9ee;
+
+            a {
+                background: #8f7a66;
+                color: #f9f6f2;
+            }
+        }
+            
+        > div {
+            > div {
+                width: calc(100% / 3);
+                background-color: #FAF9F9;
+
+                i.fa-circle {
+                    font-size: 2em;
+                    color: rgb(230, 129, 105);
+                }
+
+                i.fa-xmark {
+                    font-size: 2em;
+                    color: rgb(232, 198, 104);
                 }
             }
         }

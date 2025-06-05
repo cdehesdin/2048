@@ -32,7 +32,7 @@
             <div class="title">
                 <h1>2048</h1>
                 <div>
-                    <a class="retry"><i class="fa-solid fa-rotate-right"></i></a>
+                    <a class="stop hidden"><i class="fa-solid fa-pause"></i></a>
                     <div id="score">0</div>
                 </div>
             </div>
@@ -40,6 +40,7 @@
                 <div class="game-message">
                     <span class="hidden">Jeu terminé !</span>
                     <a class="retry">Commencez une partie</a>
+                    <a class="continue hidden">Continuer la partie</a>
                 </div>
                 <div>
                     <div id="cell-1"></div>
@@ -67,7 +68,7 @@
                 </div>
             </table>
         </div>
-        <footer>© 2025-26 • Clément DEHESDIN</footer>
+        <footer>© 2025-<script>document.write(new Date().getYear()-100);</script> • Clément DEHESDIN</footer>
     </main>
 </body>
 </html>

@@ -248,19 +248,35 @@ const gameActive = (axes) => {
 
     if (game.isFinish()) {
         document.querySelector(`.game-message`).classList.remove("hidden")
-        document.querySelector(`.game-message a.retry`).innerHTML = "Recommencez une partie"
-        document.querySelector(`.game-message span`).classList = []
+        document.querySelector(`.stop`).classList.add("hidden")
+        document.querySelector(`.game-message span`).classList.remove("hidden")
     }
 }
 
 let game = undefined
 
-document.querySelectorAll(`.retry`).forEach((element) => element.addEventListener("click", () => {
+document.querySelector(`.stop`).addEventListener("click", () => {
+    document.querySelector(`.game-message`).classList.remove("hidden")
+    document.querySelector(`.stop`).classList.add("hidden")
+    document.querySelector(`.game-message a.continue`).classList.remove("hidden")
+    document.querySelector(`.game-message span`).classList.add("hidden")
+})
+
+document.querySelector(`.retry`).addEventListener("click", () => {
     document.querySelector(`.game-message`).classList.add("hidden")
+    document.querySelector(`.game-message a.retry`).innerHTML = "Recommencez une partie"
+    document.querySelector(`.stop`).classList.remove("hidden")
+
     game = new Game_2048()
     clearGame(game)
     displayGame(game)
-}))
+})
+
+document.querySelector(`.game-message a.continue`).addEventListener("click", () => {
+    document.querySelector(`.game-message`).classList.add("hidden")
+    document.querySelector(`.game-message a.continue`).classList.add("hidden")
+    document.querySelector(`.stop`).classList.remove("hidden")
+})
 
 // Pour le mouvement avec les flèches
 document.addEventListener("keydown", (e) => {
