@@ -13,5 +13,7 @@ const autoPlayStep = () => {
     game.movement(bestMove);
     displayGame(game);
 
+    checkGameOver();
+
     gameState.botTimeoutId = setTimeout(autoPlayStep, 120);
 };
