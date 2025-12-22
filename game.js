@@ -89,7 +89,7 @@ class Game_2048 {
         return !['l', 'r', 'u', 'd'].some(dir => this.isValid(dir));
     }
 
-    // Méthode Monte-Carlo pour le bot
+    // Méthode pour le bot
     bestMoveMonteCarlo(simulations = 100) {
         const directions = ['l','r','u','d'];
         let bestScore = -Infinity;
