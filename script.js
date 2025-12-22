@@ -1,338 +1,178 @@
-const randomInt = (max) => Math.floor(Math.random() * max)
+const randomInt = (max) => Math.floor(Math.random() * max);
 
-const clearGame = (game) => {
-    for (let x=0; x<game.grid.length; x++) {
-        for (let y=0; y<game.grid.length; y++) {
-            const cell = document.querySelector(`#cell-${game.grid.length*x+y+1}`)
-            cell.innerHTML = null
-            cell.className = null
-        }
-    }
-}
+const updateCell = (x, y, value, size) => {
+    const cell = document.querySelector(`#cell-${size * x + y + 1}`);
+    cell.innerHTML = value || '';
+    cell.className = '';
+    if (value !== 0) cell.classList.add(`nb-${value}`);
+};
 
 const displayGame = (game) => {
-    document.querySelector(`#score`).innerHTML = game.score
-    for (let x=0; x<game.grid.length; x++) {
-        for (let y=0; y<game.grid.length; y++) {
-            if (game.grid[x][y] !== 0) {
-                const cell = document.querySelector(`#cell-${game.grid.length*x+y+1}`)
-                cell.innerHTML = game.grid[x][y]
-                cell.classList.add(`nb-${game.grid[x][y]}`)
-            }
-        }
-    }
-}
+    document.querySelector(`#score`).innerHTML = game.score;
+    for (let x = 0; x < game.grid.length; x++)
+        for (let y = 0; y < game.grid.length; y++)
+            updateCell(x, y, game.grid[x][y], game.grid.length);
+};
 
 class Game_2048 {
-    grid = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
-    score = 0
+    grid = Array.from({ length: 4 }, () => Array(4).fill(0));
+    score = 0;
 
-    constructor () {
-        for (let nb=0; nb<2; nb++) {
-            let x = randomInt(4), y = randomInt(4)
-            while (this.grid[x][y] !== 0) {
-                x = randomInt(4)
-                y = randomInt(4)
-            }
-            this.grid[x][y] = this.twoOrFour()
-        }
+    constructor() {
+        this.addRandomTile();
+        this.addRandomTile();
     }
 
-    clone () {
+    clone() {
         const newGame = new Game_2048();
-        newGame.grid = this.grid.map((arr) => arr.slice())
-        newGame.score = this.score
-        return newGame
+        newGame.grid = this.grid.map(row => row.slice());
+        newGame.score = this.score;
+        return newGame;
     }
 
-    twoOrFour () {
-        if (randomInt(10) === 9)
-            return 4
-        else
-            return 2
+    twoOrFour() {
+        return randomInt(10) === 9 ? 4 : 2;
     }
 
-    left () {
-        for (let nb=0; nb<2; nb++) {
-            // Mouvement
-            for (let x=0; x < this.grid.length; x++) {
-                for (let y=1; y < this.grid.length; y++) {
-                    if (this.grid[x][y] !== 0) {
-                        let gap = 1
-                        while (y-gap >= 0 && y-gap <= this.grid.length-1 && this.grid[x][y-gap] === 0) {
-                            this.grid[x][y-gap] = this.grid[x][y-gap+1]
-                            this.grid[x][y-gap+1] = 0
-                            gap++
-                        }
-                    }
-                }
-            }
+    addRandomTile() {
+        let x, y;
+        do {
+            x = randomInt(4);
+            y = randomInt(4);
+        } while (this.grid[x][y] !== 0);
+        this.grid[x][y] = this.twoOrFour();
+    }
 
-            // Fusion
-            if (nb === 0) {
-                for (let x=0; x < this.grid.length; x++) {
-                    for (let y=1; y < this.grid.length; y++) {
-                        if (this.grid[x][y] !== 0) {
-                            if (this.grid[x][y-1] === this.grid[x][y]) {
-                                this.score += this.grid[x][y]*2
-                                this.grid[x][y-1] = this.grid[x][y]*2
-                                this.grid[x][y] = 0
-                            }
-                        }
-                    }
-                }
+    slideAndMergeLine(line) {
+        // Déplacement vers la gauche
+        let arr = line.filter(n => n !== 0);
+        for (let i = 0; i < arr.length - 1; i++) {
+            if (arr[i] === arr[i + 1]) {
+                arr[i] *= 2;
+                this.score += arr[i];
+                arr[i + 1] = 0;
             }
+        }
+        arr = arr.filter(n => n !== 0);
+        while (arr.length < line.length) arr.push(0);
+        return arr;
+    }
+
+    moveLeft() {
+        for (let x = 0; x < 4; x++)
+            this.grid[x] = this.slideAndMergeLine(this.grid[x]);
+    }
+
+    moveRight() {
+        for (let x = 0; x < 4; x++)
+            this.grid[x] = this.slideAndMergeLine([...this.grid[x]].reverse()).reverse();
+    }
+
+    moveUp() {
+        for (let y = 0; y < 4; y++) {
+            const col = this.grid.map(row => row[y]);
+            const merged = this.slideAndMergeLine(col);
+            for (let x = 0; x < 4; x++) this.grid[x][y] = merged[x];
         }
     }
 
-    right () {
-        for (let nb=0; nb<2; nb++) {
-            // Mouvement
-            for (let x=0; x<this.grid.length; x++) {
-                for (let y=this.grid.length-2; y>-1; y--) {
-                    if (this.grid[x][y] !== 0) {
-                        let gap = 1
-                        while (0 <= y+gap && y+gap <= this.grid.length-1 && this.grid[x][y+gap] === 0) {
-                            this.grid[x][y+gap] = this.grid[x][y+gap-1]
-                            this.grid[x][y+gap-1] = 0
-                            gap++
-                        }
-                    }
-                }
-            }
-
-            // Fusion
-            if (nb == 0) {
-                for (let x=0; x<this.grid.length; x++) {
-                    for (let y=this.grid.length-2; y>-1; y--) {
-                        if (this.grid[x][y] !== 0) {
-                            if (this.grid[x][y+1] === this.grid[x][y]) {
-                                this.grid[x][y+1] = this.grid[x][y]*2
-                                this.score += this.grid[x][y]*2
-                                this.grid[x][y] = 0
-                            }
-                        }
-                    }
-                }
-            }
+    moveDown() {
+        for (let y = 0; y < 4; y++) {
+            const col = this.grid.map(row => row[y]).reverse();
+            const merged = this.slideAndMergeLine(col).reverse();
+            for (let x = 0; x < 4; x++) this.grid[x][y] = merged[x];
         }
     }
 
-    up () {
-        for (let nb=0; nb<2; nb++) {
-            // Mouvement
-            for (let x=1; x<this.grid.length; x++) {
-                for (let y=0; y<this.grid.length; y++) {
-                    if (this.grid[x][y] !== 0) {
-                        let gap = 1
-                        while (0 <= x-gap && x-gap <= this.grid.length-1 && this.grid[x-gap][y] === 0) {
-                            this.grid[x-gap][y] = this.grid[x-gap+1][y]
-                            this.grid[x-gap+1][y] = 0
-                            gap++
-                        }
-                    }
-                }
-            }
-            // Fusion
-            if (nb == 0) {
-                for (let x=1; x<this.grid.length; x++) {
-                    for (let y=0; y<this.grid.length; y++) {
-                        if (this.grid[x][y] !== 0) {
-                            if (this.grid[x-1][y] === this.grid[x][y]) {
-                                this.grid[x-1][y] = this.grid[x][y]*2
-                                this.score += this.grid[x][y]*2
-                                this.grid[x][y] = 0
-                            }
-                        }
-                    }
-                }
-            }
+    movement(direction) {
+        const clone = this.clone();
+        switch (direction) {
+            case 'l': this.moveLeft(); break;
+            case 'r': this.moveRight(); break;
+            case 'u': this.moveUp(); break;
+            case 'd': this.moveDown(); break;
         }
+        // Ajouter une tuile seulement si mouvement réel
+        if (JSON.stringify(clone.grid) !== JSON.stringify(this.grid)) this.addRandomTile();
     }
 
-    down () {
-        for (let nb=0; nb<2; nb++) {
-            // Mouvement
-            for (let x=this.grid.length-2; x>-1; x--) {
-                for (let y=0; y<this.grid.length; y++) {
-                    if (this.grid[x][y] !== 0) {
-                        let gap = 1
-                        while (0 <= x+gap && x+gap <= this.grid.length-1 && this.grid[x+gap][y] === 0) {
-                            this.grid[x+gap][y] = this.grid[x+gap-1][y]
-                            this.grid[x+gap-1][y] = 0
-                            gap++
-                        }
-                    }
-                }
-            }
-
-            // Fusion
-            if (nb == 0) {
-                for (let x=this.grid.length-2; x>-1; x--) {
-                    for (let y=0; y<this.grid.length; y++) {
-                        if (this.grid[x][y] !== 0) {
-                            if (this.grid[x+1][y] === this.grid[x][y]) {
-                                this.grid[x+1][y] = this.grid[x][y]*2
-                                this.score += this.grid[x][y]*2
-                                this.grid[x][y] = 0
-                            }
-                        }
-                    }
-                }
-            }
-        }
+    isValid(direction) {
+        const clone = this.clone();
+        clone.movement(direction);
+        return JSON.stringify(clone.grid) !== JSON.stringify(this.grid);
     }
 
-    movement (axes) {
-        switch (axes) {
-            case 'd': case 0:
-                this.down()
-                break
-            case 'u': case 1:
-                this.up()
-                break
-            case 'l': case 2:
-                this.left()
-                break
-            case 'r': case 3:
-                this.right()
-                break
-        }
-    }
-
-    isValid (axes) {
-        const newGame = this.clone()
-        newGame.movement(axes)
-        for (let x=0; x<this.grid.length; x++) {
-            for (let y=0; y<this.grid.length; y++) {
-                if (newGame.grid[x][y] != this.grid[x][y])
-                    return true
-            }
-        }
-        return false
-    }
-
-    isFinish () {
-        for (let axes=0; axes<this.grid.length; axes++) {
-            if (this.isValid(axes))
-                return false
-        }
-        return true
+    isFinish() {
+        return !['l', 'r', 'u', 'd'].some(dir => this.isValid(dir));
     }
 }
 
-const gameActive = (axes) => {
-    if (game.isValid(axes)) {
-        game.movement(axes)
-                
-        let x = randomInt(4), y = randomInt(4)
-        while (game.grid[x][y] !== 0) {
-            x = randomInt(4)
-            y = randomInt(4)
-        }
-        game.grid[x][y] = game.twoOrFour()
-    }
+// ------------------- Gestion interface -------------------
+let game;
 
-    document.querySelector(`#score`).innerHTML = game.score
-    for (let x=0; x<game.grid.length; x++) {
-        for (let y=0; y<game.grid.length; y++) {
-            const cell = document.querySelector(`#cell-${game.grid.length*x+y+1}`)
-            cell.innerHTML = null
-            cell.classList = []
-            if (game.grid[x][y] !== 0) {
-                cell.innerHTML = game.grid[x][y]
-                cell.classList.add(`nb-${game.grid[x][y]}`)
-            }
-        }
-    }
+const gameActive = (direction) => {
+    if (!game || !game.isValid(direction)) return;
+    game.movement(direction);
+    displayGame(game);
 
     if (game.isFinish()) {
-        document.querySelector(`.game-message`).classList.remove("hidden")
-        document.querySelector(`.stop`).classList.add("hidden")
-        document.querySelector(`.game-message span`).classList.remove("hidden")
+        document.querySelector(`.game-message`).classList.remove("hidden");
+        document.querySelector(`.stop`).classList.add("hidden");
+        document.querySelector(`.game-message span`).classList.remove("hidden");
     }
-}
+};
 
-let game = undefined
-
+// Boutons
 document.querySelector(`.stop`).addEventListener("click", () => {
-    document.querySelector(`.game-message`).classList.remove("hidden")
-    document.querySelector(`.stop`).classList.add("hidden")
-    document.querySelector(`.game-message a.continue`).classList.remove("hidden")
-    document.querySelector(`.game-message span`).classList.add("hidden")
-})
+    document.querySelector(`.game-message`).classList.remove("hidden");
+    document.querySelector(`.stop`).classList.add("hidden");
+    document.querySelector(`.game-message a.continue`).classList.remove("hidden");
+    document.querySelector(`.game-message span`).classList.add("hidden");
+});
 
 document.querySelector(`.retry`).addEventListener("click", () => {
-    document.querySelector(`.game-message`).classList.add("hidden")
-    document.querySelector(`.game-message a.retry`).innerHTML = "Recommencez une partie"
-    document.querySelector(`.stop`).classList.remove("hidden")
-
-    game = new Game_2048()
-    clearGame(game)
-    displayGame(game)
-})
+    document.querySelector(`.game-message`).classList.add("hidden");
+    document.querySelector(`.game-message a.retry`).innerHTML = "Recommencez une partie";
+    document.querySelector(`.stop`).classList.remove("hidden");
+    game = new Game_2048();
+    displayGame(game);
+});
 
 document.querySelector(`.game-message a.continue`).addEventListener("click", () => {
-    document.querySelector(`.game-message`).classList.add("hidden")
-    document.querySelector(`.game-message a.continue`).classList.add("hidden")
-    document.querySelector(`.stop`).classList.remove("hidden")
-})
+    document.querySelector(`.game-message`).classList.add("hidden");
+    document.querySelector(`.game-message a.continue`).classList.add("hidden");
+    document.querySelector(`.stop`).classList.remove("hidden");
+});
 
-// Pour le mouvement avec les flèches
+// Clavier
 document.addEventListener("keydown", (e) => {
-    if (typeof game !== 'undefined' && !game.isFinish()) {
-        switch (e.key) {
-            case "ArrowUp":
-                gameActive('u')
-                break
-            case "ArrowDown":
-                gameActive('d')
-                break
-            case "ArrowRight":
-                gameActive('r')
-                break
-            case "ArrowLeft":
-                gameActive('l')
-                break
-        }
+    if (!game || game.isFinish()) return;
+    switch (e.key) {
+        case "ArrowUp": gameActive('u'); break;
+        case "ArrowDown": gameActive('d'); break;
+        case "ArrowLeft": gameActive('l'); break;
+        case "ArrowRight": gameActive('r'); break;
     }
-})
+});
 
-// Pour le mouvement avec les doigts
-let startX = 0;
-let startY = 0;
+// Tactile
+let startX = 0, startY = 0;
+const seuil = 30;
 
-document.querySelector(`.game`).addEventListener("touchstart", function (e) {
+document.querySelector(`.game`).addEventListener("touchstart", (e) => {
     startX = e.touches[0].clientX;
     startY = e.touches[0].clientY;
 });
 
-document.querySelector(`.game`).addEventListener("touchend", function (e) {
-    if (typeof game !== 'undefined' && !game.isFinish()) {
-        const endX = e.changedTouches[0].clientX;
-        const endY = e.changedTouches[0].clientY;
+document.querySelector(`.game`).addEventListener("touchend", (e) => {
+    if (!game || game.isFinish()) return;
+    const deltaX = e.changedTouches[0].clientX - startX;
+    const deltaY = e.changedTouches[0].clientY - startY;
 
-        const deltaX = endX - startX;
-        const deltaY = endY - startY;
+    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > seuil)
+        gameActive(deltaX > 0 ? 'r' : 'l');
+    else if (Math.abs(deltaY) > seuil)
+        gameActive(deltaY > 0 ? 'd' : 'u');
 
-        const seuil = 30;
-
-        if (Math.abs(deltaX) > Math.abs(deltaY)) {
-            if (Math.abs(deltaX) > seuil) {
-                if (deltaX > 0)
-                    gameActive('r')
-                else
-                    gameActive('l')
-            }
-        } else {
-            if (Math.abs(deltaY) > seuil) {
-                if (deltaY > 0)
-                    gameActive('d')
-                else
-                    gameActive('u')
-            }
-        }
-    }
-    startX = 0
-    startY = 0
+    startX = 0; startY = 0;
 });
