@@ -244,21 +244,20 @@ const gridElement = document.querySelector('.grid');
 
 gridElement.addEventListener('touchstart', (e) => {
     if (!gameState.playing || gameState.paused) return;
-
+    e.preventDefault();
     const touch = e.touches[0];
     touchStartX = touch.clientX;
     touchStartY = touch.clientY;
-}, { passive: true });
+}, { passive: false });
 
 gridElement.addEventListener('touchend', (e) => {
     if (!gameState.playing || gameState.paused) return;
-
+    e.preventDefault();
     const touch = e.changedTouches[0];
     touchEndX = touch.clientX;
     touchEndY = touch.clientY;
-
     handleSwipe();
-}, { passive: true });
+}, { passive: false });
 
 function handleSwipe() {
     const dx = touchEndX - touchStartX;
