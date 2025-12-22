@@ -240,24 +240,25 @@ let touchEndX = 0;
 let touchEndY = 0;
 
 const minSwipeDistance = 30;
-const gridElement = document.querySelector('.grid');
+const gridElement = document.querySelector('.x-grid');
 
 gridElement.addEventListener('touchstart', (e) => {
     if (!gameState.playing || gameState.paused) return;
-    e.preventDefault();
+
     const touch = e.touches[0];
     touchStartX = touch.clientX;
     touchStartY = touch.clientY;
-}, { passive: false });
+}, { passive: true });
 
 gridElement.addEventListener('touchend', (e) => {
     if (!gameState.playing || gameState.paused) return;
-    e.preventDefault();
+
     const touch = e.changedTouches[0];
     touchEndX = touch.clientX;
     touchEndY = touch.clientY;
+
     handleSwipe();
-}, { passive: false });
+}, { passive: true });
 
 function handleSwipe() {
     const dx = touchEndX - touchStartX;
