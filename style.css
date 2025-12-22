@@ -41,7 +41,7 @@ main {width: 100%;}
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 40px 20px;
+    padding: 20px;
     overflow-y: scroll;
 
     > div {
@@ -167,6 +167,8 @@ main {width: 100%;}
         .game-message {
             margin: -15px;
             background-color: rgba(238, 228, 218, 0.75);
+            align-self: center;
+            justify-self: center;
         }
             
         > div > div {

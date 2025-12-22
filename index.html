@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="utf-8">
-    <title>Clément DEHESDIN</title>
+    <title>2048</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://lalten.github.io/lmweb/style/latinmodern-sans.css" type="text/css" charset="utf-8"/>
@@ -25,6 +25,7 @@
                 </div>
             </div>
             <div class="table">
+                <div class="game-message" style="display: none;"></div>
                 <div>
                     <div id="cell-1"></div>
                     <div id="cell-2"></div>
@@ -55,7 +56,7 @@
             <div>
                 <div class="active" id="pause">
                     <!-- Start logo -->
-                    <svg width="32px" height="32px" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                    <svg style="display: none;" width="32px" height="32px" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
                         <path d="M3 2v12s6.333-2.833 10.666-6C9.333 4.833 3 2 3 2z" fill="#fff" color="#fff"/>
                     </svg>
                     <!-- Pause logo -->
