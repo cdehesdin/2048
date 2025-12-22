@@ -1,10 +1,8 @@
 ## FunPlay
 
-Développement de **FunPlay**, une plateforme rassemblant les jeux 2048 et Sudoku, réalisé dans le cadre d’un projet personnel et, conçus en HTML, CSS et JavaScript.
+Création du mini-jeu 2048 avec un bot capable de remporter les parties, réalisé dans le cadre d’un projet personnel et, conçus en HTML, CSS et JavaScript.
 
 > Site web : [https://cdehesdin.github.io/FunPlay](https://cdehesdin.github.io/FunPlay).
-
-###  Jeu 2048
 
 [2048](https://play2048.co/) est un jeu vidéo de type puzzle, variante du *jeu de taquin*. Il a été développé par [Gabriele Cirulli](http://gabrielecirulli.com/) en 2014 (19 ans à l’époque) et publié en ligne sous licence libre.
 
@@ -15,6 +13,3 @@ alors elles se combinent en une unique tuile étiquetée par la somme des valeur
 ci-dessus.
 
 Le but du jeu est de créer une tuile portant le numéro 2048. Cependant, on pourra continuer à jouer après avoir atteint le but, en créant des tuiles avec des numéros plus grands et ainsi améliorer son score. Le jeu se termine lorsque toutes les tuiles sont occupées et que plus aucun mouvement ne permet de combiner de tuiles.
-
-### Sudoku
-
