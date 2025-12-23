@@ -1,4 +1,4 @@
-## FunPlay
+## Jeu 2048
 
 Création du mini-jeu 2048 avec un bot capable de remporter les parties, réalisé dans le cadre d'un projet personnel et, conçus en HTML, CSS et JavaScript.
 
